@@ -9,7 +9,7 @@
 		"composer/installers": "*",
 		"imsamurai/cakephp-task-plugin": "1.0.*",
 		"samokspv/cakephp-db-configure": "1.0.*",
-		"samokspv/CakePdf": "1.0.*"
+		"samokspv/Cake-Pdf": "1.0.*"
 	},
 	"extra": {
 		"installer-name": "PdfGenerator"
