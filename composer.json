@@ -1,7 +1,7 @@
 {
 	"name": "samokspv/cakephp-pdf-generator",
 	"type": "cakephp-plugin",
-	"description": "Add button pdf generation in page for task pdf generation (get data from current url, format json)",
+	"description": "Adds button pdf generation to the page for task pdf generation (get data from current url, format json)",
 	"homepage": "http://github.com/samokspv/cakephp-pdf-generator",
 	"license": "MIT",
 	"require": {
