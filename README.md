@@ -40,5 +40,43 @@ then add plugin loading in Config/bootstrap.php
 			...
 		]
 
-	In any place of your code where you need button:
+	In any place of your view where you need button:
 	echo $this->element('PdfGenerator.pdf/generate-link');
+
+	app/Config/core.php:
+	Configure::write('PdfGenerator', array(
+		'pdf' => array(
+			'cacheDir' => WWW_ROOT . 'cache/pdf', // link to pdf file
+			'css' => WWW_ROOT . 'css/pdf/pdf.css' // link to css for pdf file
+			'log' => LOGS . 'error.log', // link to log file
+			'pages' => array(
+				array(
+					'element' => 'pdf/cover' // first page
+				),
+				array(
+					'element' => 'pdf/documents' // data from http://localhost/documents/view/14210.json
+				)
+			) // elements will be included in the pdf file
+		)
+	));
+	Configure::write('Task', array(
+		'timeout' => 60 * 60 * 24 * 5,
+		'dateDiffFormat' => "%h hours, %i min, %s sec",
+		'processEvents' => array(
+			array(
+				'model' => 'PdfGenerator.PdfGenerator',
+				'key' => 'Task.taskStarted',
+				'options' => array()
+			),
+			array(
+				'model' => 'PdfGenerator.PdfGenerator',
+				'key' => 'Task.taskUpdated',
+				'options' => array()
+			),
+			array(
+				'model' => 'PdfGenerator.PdfGenerator',
+				'key' => 'Task.taskStopped',
+				'options' => array()
+			)
+		)
+	));
