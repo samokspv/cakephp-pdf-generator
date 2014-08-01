@@ -150,7 +150,7 @@ class PdfGenerator extends PdfGeneratorAppModel {
 			'pdf' => array(
 				'pages' => $pdf['pages'],
 				'date' => $this->getDate(),
-				'curl' => $params['curl']
+				'curl' => $this->getDocumentsUrl($params['curl'])
 			)
 		);
 		$this->CakePdf->viewVars($viewVars);
@@ -223,6 +223,15 @@ class PdfGenerator extends PdfGeneratorAppModel {
 	 * @return string
 	 */
 	public function fixDocumentsUrl($curl) {
-		return 'http://' . SERVER_NAME . DS . $curl . '.json';
+		return $this->getDocumentsUrl($curl) . '.json';
+	}
+
+	/**
+	 * Returns documents url
+	 * @param  string $curl
+	 * @return string
+	 */
+	public function getDocumentsUrl($curl) {
+		return Router::fullBaseUrl() . DS . $curl;
 	}
 }

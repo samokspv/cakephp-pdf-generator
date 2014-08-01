@@ -22,9 +22,9 @@ then add plugin loading in Config/bootstrap.php
 	For example:
 
 	You url:
-		http://localhost/documents/view/14210
+		http://your_domain/documents/view/14210
 	
-		http://localhost/documents/view/14210.json - must return array data in json:
+		http://your_domain/documents/view/14210.json - must return array data in json:
 		[
 			{
 				"field1": "text1",
@@ -54,7 +54,7 @@ then add plugin loading in Config/bootstrap.php
 					'element' => 'pdf/cover' // first page
 				),
 				array(
-					'element' => 'pdf/documents' // data from http://localhost/documents/view/14210.json
+					'element' => 'pdf/documents' // data from http://your_domain/documents/view/14210.json
 				)
 			) // elements will be included in the pdf file
 		)
@@ -80,3 +80,4 @@ then add plugin loading in Config/bootstrap.php
 			)
 		)
 	));
+	Configure::write('App.fullBaseUrl', 'http://your_domain');
