@@ -220,10 +220,18 @@ class PdfGenerator extends PdfGeneratorAppModel {
 	/**
 	 * Returns fix documents url
 	 * @param  string $curl
+	 * @param  string $split
 	 * @return string
 	 */
-	public function fixDocumentsUrl($curl) {
-		return $this->getDocumentsUrl($curl) . '.json';
+	public function fixDocumentsUrl($curl, $split = '?') {
+		$ext = '.json';
+		if (stripos($curl, $split) !== false) {
+			$curl = explode($split, $curl);
+			$curl = $curl[0] . $ext . $split . $curl[1];
+		} else {
+			$curl .= $ext;
+		}
+		return $this->getDocumentsUrl($curl);
 	}
 
 	/**
@@ -232,6 +240,6 @@ class PdfGenerator extends PdfGeneratorAppModel {
 	 * @return string
 	 */
 	public function getDocumentsUrl($curl) {
-		return Router::fullBaseUrl() . DS . $curl;
+		return Router::fullBaseUrl() . $curl;
 	}
 }
