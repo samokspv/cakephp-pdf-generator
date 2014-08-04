@@ -208,11 +208,7 @@ class PdfGenerator extends PdfGeneratorAppModel {
 	 */
 	public function getDataDocumentsByUrl($curl) {
 		$curl = $this->fixDocumentsUrl($curl);
-		$ch = curl_init($curl);
-		curl_setopt($ch, CURLOPT_HEADER, 0);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$data = curl_exec($ch);
-		curl_close($ch);
+		$data = file_get_contents($curl);
 		$data = json_decode($data, true);
 		return $data;
 	}
@@ -227,7 +223,7 @@ class PdfGenerator extends PdfGeneratorAppModel {
 		$ext = '.json';
 		if (stripos($curl, $split) !== false) {
 			$curl = explode($split, $curl);
-			$curl = $curl[0] . $ext . $split . urlencode($curl[1]);
+			$curl = $curl[0] . $ext . $split . $curl[1];
 		} else {
 			$curl .= $ext;
 		}
