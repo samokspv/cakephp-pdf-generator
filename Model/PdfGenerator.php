@@ -231,7 +231,7 @@ class PdfGenerator extends PdfGeneratorAppModel {
 		} else {
 			$curl .= $ext;
 		}
-		return $this->getDocumentsUrl($curl);
+		return urlencode($this->getDocumentsUrl($curl));
 	}
 
 	/**
