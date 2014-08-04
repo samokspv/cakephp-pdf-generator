@@ -227,11 +227,11 @@ class PdfGenerator extends PdfGeneratorAppModel {
 		$ext = '.json';
 		if (stripos($curl, $split) !== false) {
 			$curl = explode($split, $curl);
-			$curl = $curl[0] . $ext . $split . $curl[1];
+			$curl = $curl[0] . $ext . $split . urlencode($curl[1]);
 		} else {
 			$curl .= $ext;
 		}
-		return urlencode($this->getDocumentsUrl($curl));
+		return $this->getDocumentsUrl($curl);
 	}
 
 	/**
