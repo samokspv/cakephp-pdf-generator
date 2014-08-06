@@ -8,25 +8,10 @@
  */
 
 CakePlugin::load('CakePdf', array('bootstrap' => true, 'routes' => true));
+
+include 'defaultConfig.php';
 $config = Hash::mergeDiff(
 	(array)Configure::read('PdfGenerator'),
-	array(
-		'pdf' => array(
-			'ext' => '.pdf',
-			'theme' => '',
-			'cacheDir' => WWW_ROOT . 'cache/pdf',
-			'css' => '',
-			'template' => 'PdfGenerator.Pdf',
-			'log' => LOGS . 'error.log',
-			'pages' => array(
-				array(
-					'element' => 'pdf/cover'
-				),
-				array(
-					'element' => 'pdf/documents'
-				)
-			)
-		)
-	)
+	$defaultConfig
 );
 Configure::write('PdfGenerator', $config);
