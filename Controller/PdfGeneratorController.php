@@ -43,14 +43,9 @@ class PdfGeneratorController extends PdfGeneratorAppController {
 	public function generate() {
 		$params['name'] = $this->request->query('name');
 		$params['curl'] = rawurldecode($this->request->query('curl'));
-		$this->PdfGenerator->init($params);
 		try {
-			$fileName = $params['name'] . Configure::read('PdfGenerator.pdf.ext');
-			$filePath = TMP . $fileName;
-			$this->PdfGenerator->CakePdf->write($filePath);
-			if ($this->PdfGenerator->moveFileToCacheDir($fileName)) {
-				return true;
-			}
+			$this->PdfGenerator->init($params);
+			return $this->PdfGenerator->generate();
 		} catch (Exception $e) {
 			error_log($e . "\n", 3, Configure::read('PdfGenerator.pdf.log'));
 		}

@@ -1,0 +1,37 @@
+/* Pdf genarate link */
+div.generate-pdf-link {
+	border:1px solid #FFFFFF;
+	text-align: center;
+	width: 111px;
+	margin: 10px 0px 10px 0px;
+}
+div.generate-pdf-link img {
+	cursor: pointer;
+}
+
+/*#pdfLoadingLed {
+	background: green;
+}*/
+#pdfLoadingLed .status {
+	color: #FFFFFF;
+	font-weight: bold;
+}
+#pdfLoadingLed .status a {
+	color: #FFFFFF;
+}
+#pdfLoadingLed .loading-new {
+	background: url("../images/top_loader_new.gif") no-repeat scroll left center rgba(0, 0, 0, 0);
+	display: inline;
+	padding-left: 20px;
+}
+#pdfLoadingLed .loading-running {
+	background: url("../images/top_loader_running.gif") no-repeat scroll left center rgba(0, 0, 0, 0);
+	display: inline;
+	padding-left: 20px;
+}
+#pdfLoadingLed .finished {
+	background: #333;
+}
+#pdfLoadingLed .error {
+	background: red;
+}

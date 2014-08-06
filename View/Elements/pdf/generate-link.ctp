@@ -1,5 +1,5 @@
 <?php 
-echo $this->Html->css('PdfGenerator.pdf');
+echo $this->Html->css('PdfGenerator.generate-pdf-link');
 echo $this->Html->script('PdfGenerator.pdf');
 ?>
 <div class="generate-pdf-link">

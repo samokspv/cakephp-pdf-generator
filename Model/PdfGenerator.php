@@ -40,12 +40,24 @@ class PdfGenerator extends PdfGeneratorAppModel {
 	public static $pageNumber = 0;
 
 	/**
+	 * Config data
+	 * @var array
+	 */
+	public $config = array();
+
+	/**
+	 * Generate params
+	 * @var array
+	 */
+	public $generateParams = array();
+
+	/**
 	 * Add generate task
 	 * @param  string $curl
 	 * @return array
 	 */
 	public function generateTask($curl) {
-		$name = $this->generateName();
+		$name = $this->generateName($curl);
 		$task = $this->Task->add('Console/cake pdf generate', APP, array(
 			'--name' => $name,
 			'--curl' => $curl
@@ -66,6 +78,7 @@ class PdfGenerator extends PdfGeneratorAppModel {
 	 * @return integer
 	 */
 	public function getGenerateStatus($taskId) {
+		$task = array();
 		if (!empty($taskId)) {
 			$task = DBConfigure::read('PdfGenerator.Task.' . $taskId);
 		}
@@ -78,7 +91,7 @@ class PdfGenerator extends PdfGeneratorAppModel {
 				$task['status'] = -2;
 			}
 		}*/
-
+		
 		return array('status' => $task['status'], 'code' => $task['code']);
 	}
 
@@ -132,23 +145,27 @@ class PdfGenerator extends PdfGeneratorAppModel {
 		if (empty($params)) {
 			return false;
 		}
-		require App::pluginPath('CakePdf') . 'Pdf/CakePdf.php';
+		$this->config = Configure::read('PdfGenerator.pdf');
+		$this->generateParams = $params;
+		self::$pageNumber = 0;
+
+		require_once App::pluginPath('CakePdf') . 'Pdf/CakePdf.php';
 		$this->CakePdf = new CakePdf();
-		$pdf = Configure::read('PdfGenerator.pdf');
 		//$this->CakePdf->theme($pdf['theme']);
-		$this->CakePdf->css($pdf['css']);
-		$this->CakePdf->template($pdf['template'], false);
+		$this->CakePdf->css($this->config['css']);
+		$this->CakePdf->template($this->config['template'], false);
 		$this->CakePdf->margin(Configure::read('CakePdf.margin'));
-		foreach ($pdf['pages'] as &$page) {
+		
+		foreach ($this->config['pages'] as &$page) {
 			$el = explode(DS, $page['element']);
-			if (!empty($el[1]) && $el[1] == 'documents') {
+			if (end($el) == 'documents') {
 				$page['settings']['documents'] = $this->getDataDocumentsByUrl($params['curl']);
 				break;
 			}
 		}
 		$viewVars = array(
 			'pdf' => array(
-				'pages' => $pdf['pages'],
+				'pages' => $this->config['pages'],
 				'date' => $this->getDate(),
 				'curl' => $this->getDocumentsUrl($params['curl'])
 			)
@@ -158,11 +175,28 @@ class PdfGenerator extends PdfGeneratorAppModel {
 	}
 
 	/**
+	 * Generate pdf file
+	 * @return boolean
+	 */
+	public function generate() {
+		$fileName = $this->generateParams['name'] . $this->config['ext'];
+		if (!is_dir($this->config['tmpDir'])) {
+			mkdir($this->config['tmpDir'], 0777, true);
+		}
+		$this->CakePdf->write($this->config['tmpDir'] . $fileName);
+		if ($this->moveFileToCacheDir($fileName)) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
 	 * Generate name of Pdf file
+	 * @param  string $curl
 	 * @return string
 	 */
-	public function generateName() {
-		return md5(time());
+	public function generateName($curl) {
+		return md5($curl . time());
 	}
 
 	/**
@@ -188,14 +222,12 @@ class PdfGenerator extends PdfGeneratorAppModel {
 	 * @return boolean
 	 */
 	public function moveFileToCacheDir($fileName) {
-		$currFilePath = TMP . $fileName;
+		$currFilePath = $this->config['tmpDir'] . $fileName;
 		if (file_exists($currFilePath)) {
-			$cacheDir = Configure::read('PdfGenerator.pdf.cacheDir');
-			if (!is_dir($cacheDir)) {
-				mkdir($cacheDir, 0700, true);
+			if (!is_dir($this->config['cacheDir'])) {
+				mkdir($this->config['cacheDir'], 0777, true);
 			}
-			copy($currFilePath, $cacheDir . DS . $fileName);
-			unlink($currFilePath);
+			rename($currFilePath, $this->config['cacheDir'] . DS . $fileName);
 			return true;
 		}
 		return false;
