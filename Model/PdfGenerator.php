@@ -180,9 +180,9 @@ class PdfGenerator extends PdfGeneratorAppModel {
 	 */
 	public function generate() {
 		$fileName = $this->generateParams['name'] . $this->config['ext'];
-		if (!is_dir($this->config['tmpDir'])) {
+		/*if (!is_dir($this->config['tmpDir'])) {
 			mkdir($this->config['tmpDir'], 0777, true);
-		}
+		}*/
 		$this->CakePdf->write($this->config['tmpDir'] . $fileName);
 		if ($this->moveFileToCacheDir($fileName)) {
 			return true;
@@ -224,10 +224,10 @@ class PdfGenerator extends PdfGeneratorAppModel {
 	public function moveFileToCacheDir($fileName) {
 		$currFilePath = $this->config['tmpDir'] . $fileName;
 		if (file_exists($currFilePath)) {
-			if (!is_dir($this->config['cacheDir'])) {
+			/*if (!is_dir($this->config['cacheDir'])) {
 				mkdir($this->config['cacheDir'], 0777, true);
-			}
-			rename($currFilePath, $this->config['cacheDir'] . DS . $fileName);
+			}*/
+			rename($currFilePath, $this->config['cacheDir'] . $fileName);
 			return true;
 		}
 		return false;
