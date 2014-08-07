@@ -42,21 +42,6 @@ class PdfGeneratorControllerTest extends AppControllerTestCase {
 	}
 
 	/**
-	 * Clear temp and cache directories
-	 * @return bool
-	 */
-	public function clear() {
-		foreach (glob($this->config['cacheDir'] . '*' . $this->config['ext']) as $file) {
-			unlink($file);
-		}
-
-		foreach (glob($this->config['tmpDir'] . '*' . $this->config['ext']) as $file) {
-			unlink($file);
-		}
-		return true;
-	}
-
-	/**
 	 * Test generate task
 	 *
 	 * @param array $data
@@ -81,9 +66,11 @@ class PdfGeneratorControllerTest extends AppControllerTestCase {
 		$generate = $this->testAction($url, array(
 			'method' => 'GET'
 		));
+		$fileName = $this->config['cacheDir'] . $fileName . $this->config['ext'];
 
 		$this->assertTrue($generate);
-		$this->assertTrue(file_exists($this->config['cacheDir'] . DS . $fileName . $this->config['ext']));
+		$this->assertTrue(file_exists($fileName));
+		unlink($fileName);
 	}
 
 	/**
@@ -109,7 +96,5 @@ class PdfGeneratorControllerTest extends AppControllerTestCase {
 	 */
 	public function tearDown() {
 		parent::tearDown();
-
-		$this->clear();
 	}
 }
