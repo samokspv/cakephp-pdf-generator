@@ -1,5 +1,6 @@
 cakephp-pdf-generator
 =====================
+[![Build Status](https://travis-ci.org/samokspv/cakephp-pdf-generator.png)](https://travis-ci.org/samokspv/cakephp-pdf-generator) [![Coverage Status](https://coveralls.io/repos/samokspv/cakephp-pdf-generator/badge.png?branch=master)](https://coveralls.io/r/samokspv/cakephp-pdf-generator?branch=master) [![Latest Stable Version](https://poser.pugx.org/samokspv/cakephp-pdf-generator/v/stable.svg)](https://packagist.org/packages/samokspv/cakephp-pdf-generator) [![Total Downloads](https://poser.pugx.org/samokspv/cakephp-pdf-generator/downloads.svg)](https://packagist.org/packages/samokspv/cakephp-pdf-generator) [![Latest Unstable Version](https://poser.pugx.org/samokspv/cakephp-pdf-generator/v/unstable.svg)](https://packagist.org/packages/samokspv/cakephp-pdf-generator) [![License](https://poser.pugx.org/samokspv/cakephp-pdf-generator/license.svg)](https://packagist.org/packages/samokspv/cakephp-pdf-generator)
 
 Use it if you want add button pdf generation to the page for task pdf generation (get data from current url, format json)
 
