@@ -35,22 +35,6 @@ class PdfGeneratorController extends PdfGeneratorAppController {
 	 * @var string
 	 */
 	public $uses = array('PdfGenerator.PdfGenerator');
-
-	/**
-	 * Generate pdf file
-	 * @return boolean
-	 */
-	public function generate() {
-		$params['name'] = $this->request->query('name');
-		$params['curl'] = rawurldecode($this->request->query('curl'));
-		try {
-			$this->PdfGenerator->init($params);
-			return $this->PdfGenerator->generate();
-		} catch (Exception $e) {
-			error_log($e . "\n", 3, Configure::read('PdfGenerator.pdf.log'));
-		}
-		return false;
-	}
 	
 	/**
 	 * Add generate task

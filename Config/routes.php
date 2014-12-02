@@ -6,4 +6,4 @@
  * Format: http://book.cakephp.org/2.0/en/development/routing.html
  */
 
-Router::connect('/PdfGenerator/:action/*', array('plugin' => 'PdfGenerator'));
+Router::connect('/PdfGenerator/:action/*', array('plugin' => 'PdfGenerator', 'controller' => 'PdfGenerator'));

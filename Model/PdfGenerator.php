@@ -78,11 +78,11 @@ class PdfGenerator extends PdfGeneratorAppModel {
 	 * @return integer
 	 */
 	public function getGenerateStatus($taskId) {
-		$task = array();
 		if (!empty($taskId)) {
 			$task = DBConfigure::read('PdfGenerator.Task.' . $taskId);
 		}
-		$task += array('status' => TaskType::UNSTARTED, 'code' => -1);
+
+		$task = (array)$task + array('status' => TaskType::UNSTARTED, 'code' => -1);
 		
 		/*if ($task['status'] == TaskType::FINISHED && $task['code'] == 0) {
 			$pdf = DBConfigure::read('PdfGenerator.pdf');
@@ -145,6 +145,8 @@ class PdfGenerator extends PdfGeneratorAppModel {
 		if (empty($params)) {
 			return false;
 		}
+		$params = $this->__buildParams($params);
+
 		$this->config = Configure::read('PdfGenerator.pdf');
 		$this->generateParams = $params;
 		self::$pageNumber = 0;
@@ -175,19 +177,34 @@ class PdfGenerator extends PdfGeneratorAppModel {
 	}
 
 	/**
+	 * Build params
+	 * @param  array $params
+	 * @return array
+	 */
+	private function __buildParams($params) {
+		$params['curl'] = rawurldecode($params['curl']);
+		return $params;
+	}
+
+	/**
 	 * Generate pdf file
 	 * @return boolean
 	 */
-	public function generate() {
-		$fileName = $this->generateParams['name'] . $this->config['ext'];
-		/*if (!is_dir($this->config['tmpDir'])) {
-			mkdir($this->config['tmpDir'], 0777, true);
-		}*/
-		$this->CakePdf->write($this->config['tmpDir'] . $fileName);
-		if ($this->moveFileToCacheDir($fileName)) {
-			return true;
+	public function generate($params) {
+		try {
+			$this->init($params);
+			$fileName = $this->generateParams['name'] . $this->config['ext'];
+			/*if (!is_dir($this->config['tmpDir'])) {
+				mkdir($this->config['tmpDir'], 0777, true);
+			}*/
+			$this->CakePdf->write($this->config['tmpDir'] . $fileName);
+			if ($this->moveFileToCacheDir($fileName)) {
+				return true;
+			}
+		} catch (Exception $e) {
+			error_log($e . "\n", 3, Configure::read('PdfGenerator.pdf.log'));
+			return false;
 		}
-		return false;
 	}
 
 	/**
