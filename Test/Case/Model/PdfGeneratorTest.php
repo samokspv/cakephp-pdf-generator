@@ -7,19 +7,9 @@
  * Format: http://book.cakephp.org/2.0/en/development/testing.html
  */
 
-App::uses('AppControllerTestCase', 'TestSuite');
 App::uses('ActiveRecordManager', 'ActiveRecord.Lib/ActiveRecord');
 
-class PdfGeneratorControllerTest extends AppControllerTestCase {
-
-	/**
-	 * {@inheritdoc}
-	 *
-	 * @var array
-	 */
-	public $fixtures = array(
-		'Session'
-	);
+class PdfGeneratorTest extends CakeTestCase {
 
 	/**
 	 * {@inheritdoc}
@@ -27,6 +17,7 @@ class PdfGeneratorControllerTest extends AppControllerTestCase {
 	public function setUp() {
 		parent::setUp();
 		
+		$this->PdfGenerator = ClassRegistry::init('PdfGenerator.PdfGenerator');
 		$this->pluginPath = App::pluginPath('PdfGenerator');
 		$this->setDefaultConfig();
 	}
@@ -53,19 +44,15 @@ class PdfGeneratorControllerTest extends AppControllerTestCase {
 		$data = file_get_contents($this->pluginPath . 'Test' . DS . 'Data' . DS . $data);
 		$data = json_decode($data, true);
 		
-		$PdfGenerator = $this->generate('PdfGenerator.PdfGenerator', array(
-			'models' => array(
-				'PdfGenerator.PdfGenerator' => array('getDataDocumentsByUrl')
-			)
-		));
-		$PdfGenerator->PdfGenerator
+		$PdfGenerator = $this->getMock('PdfGenerator', array('getDataDocumentsByUrl'));
+		$PdfGenerator
 			->expects($this->any())
 			->method('getDataDocumentsByUrl')
 			->will($this->returnValue($data));
-		$url = 'PdfGenerator.PdfGenerator/generate?name=' . $fileName . '&curl=/test';
-		$generate = $this->testAction($url, array(
-			'method' => 'GET'
-		));
+
+		$params = array('name' => $fileName, 'curl' => '/test');
+		$generate = $this->PdfGenerator->generate($params);
+
 		$fileName = $this->config['cacheDir'] . $fileName . $this->config['ext'];
 
 		$this->assertTrue($generate);
