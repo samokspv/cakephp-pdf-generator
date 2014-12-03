@@ -58,7 +58,7 @@ class PdfGenerator extends PdfGeneratorAppModel {
 	 */
 	public function generateTask($curl) {
 		$name = $this->generateName($curl);
-		$task = $this->Task->add('Console/cake pdf generate', APP, array(
+		$task = $this->Task->add('Console/cakephp pdf generate', APP, array(
 			'--name' => $name,
 			'--curl' => $curl
 		));
