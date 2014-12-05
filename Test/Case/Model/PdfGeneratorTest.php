@@ -50,7 +50,7 @@ class PdfGeneratorTest extends CakeTestCase {
 			->method('getDataDocumentsByUrl')
 			->will($this->returnValue($data));
 
-		$params = array('name' => $fileName, 'curl' => '/test');
+		$params = array('name' => $fileName, 'curl' => '/');
 		$generate = $this->PdfGenerator->generate($params);
 
 		$fileName = $this->config['cacheDir'] . $fileName . $this->config['ext'];
