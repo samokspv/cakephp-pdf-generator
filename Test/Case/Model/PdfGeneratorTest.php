@@ -14,6 +14,13 @@ class PdfGeneratorTest extends CakeTestCase {
 	/**
 	 * {@inheritdoc}
 	 */
+	public $fixtures = array(
+		'session'
+	);
+
+	/**
+	 * {@inheritdoc}
+	 */
 	public function setUp() {
 		parent::setUp();
 		
@@ -44,17 +51,16 @@ class PdfGeneratorTest extends CakeTestCase {
 		$data = file_get_contents($this->pluginPath . 'Test' . DS . 'Data' . DS . $data);
 		$data = json_decode($data, true);
 		
-		$PdfGenerator = $this->getMock('PdfGenerator', array('getDataDocumentsByUrl'));
-		$PdfGenerator
+		$this->PdfGenerator = $this->getMockForModel('PdfGenerator', array('getDataDocumentsByUrl'));
+		$this->PdfGenerator
 			->expects($this->any())
 			->method('getDataDocumentsByUrl')
 			->will($this->returnValue($data));
 
 		$params = array('name' => $fileName, 'curl' => '/');
 		$generate = $this->PdfGenerator->generate($params);
-
 		$fileName = $this->config['cacheDir'] . $fileName . $this->config['ext'];
-
+		
 		$this->assertTrue($generate);
 		$this->assertTrue(file_exists($fileName));
 		unlink($fileName);
