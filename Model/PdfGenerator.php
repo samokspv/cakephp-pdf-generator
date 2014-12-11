@@ -269,12 +269,18 @@ class PdfGenerator extends PdfGeneratorAppModel {
 	 * @return string
 	 */
 	public function fixDocumentsUrl($curl, $split = '?') {
+		$curl = rawurldecode($curl);
+		$split = '?';
 		$ext = '.json';
-		if (stripos($curl, $split) !== false) {
-			$curl = explode($split, $curl);
-			$curl = $curl[0] . $ext . $split . $curl[1];
-		} else {
-			$curl .= $ext;
+		$parseUrl = parse_url($curl);
+		$curl = $parseUrl['path'] . $ext;
+		if (!empty($parseUrl['query'])) {
+			$parseUrl['query'] = str_replace($split, $ext . $split, $parseUrl['query']);
+			$query = explode($split, $parseUrl['query']);
+			if (!empty($query[1])) {
+				$query[1] = rawurlencode($query[1]);
+			}
+			$curl .= $split . implode($split, $query);
 		}
 		return $this->getDocumentsUrl($curl);
 	}
