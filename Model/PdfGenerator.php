@@ -182,7 +182,7 @@ class PdfGenerator extends PdfGeneratorAppModel {
 	 * @return array
 	 */
 	private function __buildParams($params) {
-		$params['curl'] = rawurldecode($params['curl']);
+		//$params['curl'] = rawurldecode($params['curl']);
 		return $params;
 	}
 
